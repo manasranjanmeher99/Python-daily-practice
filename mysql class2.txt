@@ -1,0 +1,334 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| assignment3        |
+| client             |
+| company            |
+| information_schema |
+| mysql              |
+| new                |
+| nit                |
+| performance_schema |
+| student            |
+| sys                |
++--------------------+
+10 rows in set (0.03 sec)
+
+mysql> use nit;
+Database changed
+mysql> show tables;
++---------------+
+| Tables_in_nit |
++---------------+
+| customers     |
+| student       |
++---------------+
+2 rows in set (0.02 sec)
+
+mysql> select * from customer;
+ERROR 1146 (42S02): Table 'nit.customer' doesn't exist
+mysql> select * from customers;
+Empty set (0.01 sec)
+
+mysql> insert into customers values
+    -> (
+    -> 1, 'Ramesh', 32 ,'Ahmedabad', 2000),
+    -> (2, 'khilan', 25 ,'Delhi', 1500),
+    -> (2, 'kausik', 23 ,'Kota', 2000),
+    -> ();
+ERROR 1136 (21S01): Column count doesn't match value count at row 4
+mysql> insert into customers values
+    -> (1, 'Ramesh', 32 ,'Ahmedabad', 2000),
+    -> (2, 'khilan', 25 ,'Delhi', 1500),
+    -> (3, 'kausik', 23 ,'Kota', 2000),
+    -> (4, 'Chaitali', 25 ,'Mumbai', 6500),
+    -> (5, 'Hardik', 27 ,'Bhopal', 8500),
+    -> (6, 'Komal', 22 ,'MP', 4500),
+    -> (7, 'Muffy', 24 ,'Indore', 10000);
+Query OK, 7 rows affected (0.02 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> desc customers;
++---------+---------------+------+-----+---------+-------+
+| Field   | Type          | Null | Key | Default | Extra |
++---------+---------------+------+-----+---------+-------+
+| ID      | int           | NO   | PRI | NULL    |       |
+| NAME    | varchar(30)   | NO   |     | NULL    |       |
+| AGE     | int           | NO   |     | NULL    |       |
+| ADDRESS | char(25)      | YES  |     | NULL    |       |
+| SALARY  | decimal(18,2) | YES  |     | NULL    |       |
++---------+---------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> select * from customers;
++----+----------+-----+-----------+----------+
+| ID | NAME     | AGE | ADDRESS   | SALARY   |
++----+----------+-----+-----------+----------+
+|  1 | Ramesh   |  32 | Ahmedabad |  2000.00 |
+|  2 | khilan   |  25 | Delhi     |  1500.00 |
+|  3 | kausik   |  23 | Kota      |  2000.00 |
+|  4 | Chaitali |  25 | Mumbai    |  6500.00 |
+|  5 | Hardik   |  27 | Bhopal    |  8500.00 |
+|  6 | Komal    |  22 | MP        |  4500.00 |
+|  7 | Muffy    |  24 | Indore    | 10000.00 |
++----+----------+-----+-----------+----------+
+7 rows in set (0.00 sec)
+
+mysql> select ID, NAME, SALARY from customers;
++----+----------+----------+
+| ID | NAME     | SALARY   |
++----+----------+----------+
+|  1 | Ramesh   |  2000.00 |
+|  2 | khilan   |  1500.00 |
+|  3 | kausik   |  2000.00 |
+|  4 | Chaitali |  6500.00 |
+|  5 | Hardik   |  8500.00 |
+|  6 | Komal    |  4500.00 |
+|  7 | Muffy    | 10000.00 |
++----+----------+----------+
+7 rows in set (0.00 sec)
+
+mysql> SELECT ID,NAME,SALARY FROM customer
+    -> WHERE SALARY>2000;
+ERROR 1146 (42S02): Table 'nit.customer' doesn't exist
+mysql> SELECT ID,NAME,SALARY FROM customers
+    -> WHERE SALARY>2000;
++----+----------+----------+
+| ID | NAME     | SALARY   |
++----+----------+----------+
+|  4 | Chaitali |  6500.00 |
+|  5 | Hardik   |  8500.00 |
+|  6 | Komal    |  4500.00 |
+|  7 | Muffy    | 10000.00 |
++----+----------+----------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT ID,NAME,SALARY FROM customers
+    -> WHERE NAME= 'Hardik';
++----+--------+---------+
+| ID | NAME   | SALARY  |
++----+--------+---------+
+|  5 | Hardik | 8500.00 |
++----+--------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT ID,NAME,SALARY FROM customers
+    -> WHERE SALARY>2000 AND AGE <25;
++----+-------+----------+
+| ID | NAME  | SALARY   |
++----+-------+----------+
+|  6 | Komal |  4500.00 |
+|  7 | Muffy | 10000.00 |
++----+-------+----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT ID,NAME,SALARY FROM customers
+    -> WHERE SALARY>2000 OR AGE <25;
++----+----------+----------+
+| ID | NAME     | SALARY   |
++----+----------+----------+
+|  3 | kausik   |  2000.00 |
+|  4 | Chaitali |  6500.00 |
+|  5 | Hardik   |  8500.00 |
+|  6 | Komal    |  4500.00 |
+|  7 | Muffy    | 10000.00 |
++----+----------+----------+
+5 rows in set (0.00 sec)
+
+mysql> Update customers
+    -> set address ='Pune'
+    -> Where id=6;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from customers;
++----+----------+-----+-----------+----------+
+| ID | NAME     | AGE | ADDRESS   | SALARY   |
++----+----------+-----+-----------+----------+
+|  1 | Ramesh   |  32 | Ahmedabad |  2000.00 |
+|  2 | khilan   |  25 | Delhi     |  1500.00 |
+|  3 | kausik   |  23 | Kota      |  2000.00 |
+|  4 | Chaitali |  25 | Mumbai    |  6500.00 |
+|  5 | Hardik   |  27 | Bhopal    |  8500.00 |
+|  6 | Komal    |  22 | Pune      |  4500.00 |
+|  7 | Muffy    |  24 | Indore    | 10000.00 |
++----+----------+-----+-----------+----------+
+7 rows in set (0.00 sec)
+
+mysql> DELETE FROM Customers
+    -> WHERE ID = 6;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from customers;
++----+----------+-----+-----------+----------+
+| ID | NAME     | AGE | ADDRESS   | SALARY   |
++----+----------+-----+-----------+----------+
+|  1 | Ramesh   |  32 | Ahmedabad |  2000.00 |
+|  2 | khilan   |  25 | Delhi     |  1500.00 |
+|  3 | kausik   |  23 | Kota      |  2000.00 |
+|  4 | Chaitali |  25 | Mumbai    |  6500.00 |
+|  5 | Hardik   |  27 | Bhopal    |  8500.00 |
+|  7 | Muffy    |  24 | Indore    | 10000.00 |
++----+----------+-----+-----------+----------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT * FROM customers
+    -> WHERE NAME LIKE 'k%';
++----+--------+-----+---------+---------+
+| ID | NAME   | AGE | ADDRESS | SALARY  |
++----+--------+-----+---------+---------+
+|  2 | khilan |  25 | Delhi   | 1500.00 |
+|  3 | kausik |  23 | Kota    | 2000.00 |
++----+--------+-----+---------+---------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM customers
+    -> WHERE NAME LIKE '%k';
++----+--------+-----+---------+---------+
+| ID | NAME   | AGE | ADDRESS | SALARY  |
++----+--------+-----+---------+---------+
+|  3 | kausik |  23 | Kota    | 2000.00 |
+|  5 | Hardik |  27 | Bhopal  | 8500.00 |
++----+--------+-----+---------+---------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM customers
+    -> WHERE NAME LIKE '%s_';
++----+--------+-----+-----------+---------+
+| ID | NAME   | AGE | ADDRESS   | SALARY  |
++----+--------+-----+-----------+---------+
+|  1 | Ramesh |  32 | Ahmedabad | 2000.00 |
++----+--------+-----+-----------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT TOP 3 * FROM customers;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '3 * FROM customers' at line 1
+mysql> SELECT * FROM customers
+    -> ORDER BY NAME;
++----+----------+-----+-----------+----------+
+| ID | NAME     | AGE | ADDRESS   | SALARY   |
++----+----------+-----+-----------+----------+
+|  4 | Chaitali |  25 | Mumbai    |  6500.00 |
+|  5 | Hardik   |  27 | Bhopal    |  8500.00 |
+|  3 | kausik   |  23 | Kota      |  2000.00 |
+|  2 | khilan   |  25 | Delhi     |  1500.00 |
+|  7 | Muffy    |  24 | Indore    | 10000.00 |
+|  1 | Ramesh   |  32 | Ahmedabad |  2000.00 |
++----+----------+-----+-----------+----------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT * FROM customers
+    -> ORDER BY SALARY;
++----+----------+-----+-----------+----------+
+| ID | NAME     | AGE | ADDRESS   | SALARY   |
++----+----------+-----+-----------+----------+
+|  2 | khilan   |  25 | Delhi     |  1500.00 |
+|  1 | Ramesh   |  32 | Ahmedabad |  2000.00 |
+|  3 | kausik   |  23 | Kota      |  2000.00 |
+|  4 | Chaitali |  25 | Mumbai    |  6500.00 |
+|  5 | Hardik   |  27 | Bhopal    |  8500.00 |
+|  7 | Muffy    |  24 | Indore    | 10000.00 |
++----+----------+-----+-----------+----------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT NAME,SUM(SALARY) FROM customers
+    -> GROUP BY NAME;
++----------+-------------+
+| NAME     | SUM(SALARY) |
++----------+-------------+
+| Ramesh   |     2000.00 |
+| khilan   |     1500.00 |
+| kausik   |     2000.00 |
+| Chaitali |     6500.00 |
+| Hardik   |     8500.00 |
+| Muffy    |    10000.00 |
++----------+-------------+
+6 rows in set (0.01 sec)
+
+mysql> SELECT DISTINCT * FROM customers;
++----+----------+-----+-----------+----------+
+| ID | NAME     | AGE | ADDRESS   | SALARY   |
++----+----------+-----+-----------+----------+
+|  1 | Ramesh   |  32 | Ahmedabad |  2000.00 |
+|  2 | khilan   |  25 | Delhi     |  1500.00 |
+|  3 | kausik   |  23 | Kota      |  2000.00 |
+|  4 | Chaitali |  25 | Mumbai    |  6500.00 |
+|  5 | Hardik   |  27 | Bhopal    |  8500.00 |
+|  7 | Muffy    |  24 | Indore    | 10000.00 |
++----+----------+-----+-----------+----------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT DISTINCT * FROM customers
+    -> ;
++----+----------+-----+-----------+----------+
+| ID | NAME     | AGE | ADDRESS   | SALARY   |
++----+----------+-----+-----------+----------+
+|  1 | Ramesh   |  32 | Ahmedabad |  2000.00 |
+|  2 | khilan   |  25 | Delhi     |  1500.00 |
+|  3 | kausik   |  23 | Kota      |  2000.00 |
+|  4 | Chaitali |  25 | Mumbai    |  6500.00 |
+|  5 | Hardik   |  27 | Bhopal    |  8500.00 |
+|  7 | Muffy    |  24 | Indore    | 10000.00 |
++----+----------+-----+-----------+----------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT DISTINCT age,name FROM customers;
++-----+----------+
+| age | name     |
++-----+----------+
+|  32 | Ramesh   |
+|  25 | khilan   |
+|  23 | kausik   |
+|  25 | Chaitali |
+|  27 | Hardik   |
+|  24 | Muffy    |
++-----+----------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT DISTINCT age FROM customers;
++-----+
+| age |
++-----+
+|  32 |
+|  25 |
+|  23 |
+|  27 |
+|  24 |
++-----+
+5 rows in set (0.00 sec)
+
+mysql> DESC customers:
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ':' at line 1
+mysql> DESC customers;
++---------+---------------+------+-----+---------+-------+
+| Field   | Type          | Null | Key | Default | Extra |
++---------+---------------+------+-----+---------+-------+
+| ID      | int           | NO   | PRI | NULL    |       |
+| NAME    | varchar(30)   | NO   |     | NULL    |       |
+| AGE     | int           | NO   |     | NULL    |       |
+| ADDRESS | char(25)      | YES  |     | NULL    |       |
+| SALARY  | decimal(18,2) | YES  |     | NULL    |       |
++---------+---------------+------+-----+---------+-------+
+5 rows in set (0.13 sec)
+
+mysql> ALTER TABLE customers
+    -> MODIFY COLUMN ADDRESS CHAR(35);
+Query OK, 6 rows affected (0.23 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> DESC customers:
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ':' at line 1
+mysql> DESC customers;
++---------+---------------+------+-----+---------+-------+
+| Field   | Type          | Null | Key | Default | Extra |
++---------+---------------+------+-----+---------+-------+
+| ID      | int           | NO   | PRI | NULL    |       |
+| NAME    | varchar(30)   | NO   |     | NULL    |       |
+| AGE     | int           | NO   |     | NULL    |       |
+| ADDRESS | char(35)      | YES  |     | NULL    |       |
+| SALARY  | decimal(18,2) | YES  |     | NULL    |       |
++---------+---------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
